@@ -55,6 +55,8 @@ else:
 
 res=s.post(url=url2,data=protect('{"type":0}'),headers=headers)
 object=json.loads(res.text)
+print(object)
+
 if object['code']!=200 and object['code']!=-2:
     print("签到时发生错误："+object['msg'])
 else:
@@ -66,6 +68,8 @@ else:
 
 res=s.post(url=url3,data=protect('{"csrf_token":"'+requests.utils.dict_from_cookiejar(tempcookie)['__csrf']+'"}'),headers=headers)
 object=json.loads(res.text,strict=False)
+buffer = []
+count = 0
 for x in object['recommend']:
     url='https://music.163.com/weapi/v3/playlist/detail?csrf_token='+requests.utils.dict_from_cookiejar(tempcookie)['__csrf']
     data={
@@ -75,8 +79,7 @@ for x in object['recommend']:
     }
     res=s.post(url,protect(json.dumps(data)),headers=headers)
     object=json.loads(res.text,strict=False)
-    buffer=[]
-    count=0
+
     for j in object['playlist']['trackIds']:
         data2={}
         data2["action"]="play"
@@ -90,9 +93,9 @@ for x in object['recommend']:
         data2["json"]["wifi"]=0
         buffer.append(data2)
         count+=1
-        if count>=310:
+        if count>=900:
             break
-    if count>=310:
+    if count>=900:
         break
 url = "http://music.163.com/weapi/feedback/weblog"
 postdata={
@@ -100,6 +103,8 @@ postdata={
 }
 res=s.post(url,protect(json.dumps(postdata)))
 object=json.loads(res.text,strict=False)
+print(object)
+
 if object['code']==200:
     print("刷单成功！共"+str(count)+"首")
     exit()
