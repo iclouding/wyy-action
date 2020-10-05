@@ -63,7 +63,8 @@ else:
     else:
         print("重复签到")
 
-
+buffer=[]
+count=0
 res=s.post(url=url3,data=protect('{"csrf_token":"'+requests.utils.dict_from_cookiejar(tempcookie)['__csrf']+'"}'),headers=headers)
 object=json.loads(res.text,strict=False)
 for x in object['recommend']:
@@ -75,8 +76,7 @@ for x in object['recommend']:
     }
     res=s.post(url,protect(json.dumps(data)),headers=headers)
     object=json.loads(res.text,strict=False)
-    buffer=[]
-    count=0
+
     for j in object['playlist']['trackIds']:
         data2={}
         data2["action"]="play"
